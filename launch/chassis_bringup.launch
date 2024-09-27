@@ -1,0 +1,8 @@
+<launch>
+
+  <rosparam command="load" file="$(find chassis)/config/params.yaml" />
+
+  <node pkg="chassis" name="chassis_test1" type="chassis_node">
+  </node>
+
+</launch>

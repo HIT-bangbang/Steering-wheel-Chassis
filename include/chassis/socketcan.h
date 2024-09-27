@@ -19,7 +19,7 @@ private:
 	struct ifreq ifr;
 public:
     Socketcan(char *canX);
-    ~Socketcan();
+    //~Socketcan();
 
     void can_write(can_frame frame);
 };
