@@ -35,7 +35,7 @@ int Motor::set_mode(short _ctrl_mode)    // 设置模式
     }
     else if (ctrl_mode == MODE_VEL) // 速度模式
     {
-        std::cout<< BLUE <<"change to position ctrl mode" << std::endl;
+        std::cout<< BLUE <<"change to vel ctrl mode" << std::endl;
         mode_fame.data[0] = 0x03;
         socketcanPtr->can_write(mode_fame);
     }
@@ -72,7 +72,7 @@ int Motor::set_vel(int32_t vel, int16_t current = 0)
 {
     if (ctrl_mode != MODE_VEL)
     {
-        std::cout << "ctrl mode not match" << std::endl;
+        std::cout << "ctrl mode: mismatch/NOT set" << std::endl;
         return -1;
     }
     int32_t rpm = vel*10;
@@ -81,7 +81,7 @@ int Motor::set_vel(int32_t vel, int16_t current = 0)
 	vel_fame.can_dlc = 6;
 	std::memset(vel_fame.data, 0, sizeof(vel_fame.data));  // 全部赋值为0
 	std::memcpy(vel_fame.data, &rpm, sizeof(rpm));     // 直接使用 memcpy() 可以同时解决字节序的问题
-    std::cout << "set velocity to " << vel << " rad/s" << std::endl;
+    //std::cout << "set velocity to " << vel << " rad/s" << std::endl;
     socketcanPtr->can_write(vel_fame);      // 切换至 ready to switch on 状态
 }
 
@@ -90,7 +90,7 @@ int Motor::set_pos(float angle, int32_t vel)
 {
     if (ctrl_mode != MODE_POS)
     {
-        std::cout << "ctrl mode not match" << std::endl;
+        std::cout << "ctrl mode: mismatch/NOT set" << std::endl;
         return -1;
     }
 
@@ -103,7 +103,7 @@ int Motor::set_pos(float angle, int32_t vel)
 	std::memset(pos_fame.data, 0, sizeof(pos_fame.data));
     std::memcpy(pos_fame.data, &ticks, sizeof(ticks));     // 设置转动的脉冲数
     std::memcpy(pos_fame.data + 4, &rpm, sizeof(rpm));     // 设置旋转的速度
-    std::cout << "set target angle to " << angle << " rad" << std::endl;
+    //std::cout << "set target angle to " << angle << " rad" << std::endl;
     socketcanPtr->can_write(pos_fame);      // 发送目标位置和速度，注意此时并未执行
 
     execute_posCtrl();  // 执行位置控制指令
@@ -119,7 +119,7 @@ int Motor::execute_posCtrl()
     ctrl_fame.data[0] = 0x3F;
     ctrl_fame.data[1] = 0x00;    //200+(ID) 3F 00
     
-    std::cout<< RED << "motor ID: " << nodeId << " execute_posCtrl" << std::endl;
+    //std::cout<< RED << "motor ID: " << nodeId << " execute_posCtrl" << std::endl;
     socketcanPtr->can_write(ctrl_fame);      // 发送执行绝对位置控制指令
 }
 

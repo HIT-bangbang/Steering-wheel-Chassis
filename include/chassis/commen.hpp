@@ -3,14 +3,18 @@
 
 //! 底盘机械属性
 
-#define WIDTH 0.5   // 宽度
-#define LENGTH 1.0  // 长度
-#define WHEEL_RADIUS 0.1
+#define WIDTH 1.14   // 宽度 m
+#define LENGTH 0.54  // 长度 m
+#define WHEEL_RADIUS 0.125  // 轮子直径 m
+#define DRIVE_GEAR_RATIO 24   // 行走电机减速比
+#define STEER_GEAR_RATIO 220.385   // 转向电机减速比
+
+#define STEER_SPEED 5000    // 转向电机速度
 
 // ! 电机can ID
 
 // 前左
-#define M_FL_STEER_ID 0xA
+#define M_FL_STEER_ID 0xB
 #define M_FL_DDRIVE_ID 0xA
 
 // 前右
@@ -22,8 +26,8 @@
 #define M_RL_DDRIVE_ID 0xA
 
 // 后右
-#define M_RR_STEER_ID 0xA
-#define M_RR_DDRIVE_ID 0xA
+#define M_RR_STEER_ID 0x15
+#define M_RR_DDRIVE_ID 0x14
 
 //! 一圈的脉冲数
 #define TICKS_PER_CYCLE 65536
@@ -60,6 +64,7 @@
 //! 数学工具
 
 #define _PI 3.14159265358979
+#define _2PI 6.2831853071796
 
 //限幅
 #define _constrain(value,low,high) ((value)<(low)?(low):((value)>(high)?(high):(value)))
