@@ -23,6 +23,11 @@ Socketcan::Socketcan(char *canX)
     }
 }
 
+/**
+ * @brief: 发送报文
+ * @param {can_frame} frame
+ * @return {*}
+ */
 void Socketcan::can_write(can_frame frame)
 {
     if (write(s, &frame, sizeof(struct can_frame)) == -1) 

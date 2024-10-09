@@ -31,6 +31,7 @@ Motor m_fl_drive(WHEEL_RADIUS, scPtr, M_FL_DDRIVE_ID);  // 左前行走电机
 Motor m_rr_steer(WHEEL_RADIUS, scPtr, M_RR_STEER_ID);   // 右后转向电机
 Motor m_rr_drive(WHEEL_RADIUS, scPtr, M_RR_DDRIVE_ID);  // 右后行走电机
 
+// cmd_vel_ 回调函数
 void cmd_velCallback(geometry_msgs::TwistConstPtr cmd)
 {
     count = 0;
@@ -41,7 +42,7 @@ void cmd_velCallback(geometry_msgs::TwistConstPtr cmd)
     kinematics.inverse(vel);
 }
 
-// 用于接收平滑后的速度
+// 用于接收平滑后的速度smooth_cmd_vel回调函数
 void smooth_cmd_vel_Callback(geometry_msgs::TwistConstPtr cmd)
 {
     count = 0;

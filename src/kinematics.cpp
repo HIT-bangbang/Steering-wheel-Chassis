@@ -8,7 +8,7 @@ Kinematics::Kinematics(float _width, float _length)
 }
 
 /**
- * @brief: 运动学正解： 当前实际轮子转速 ----- 地盘实际的线速度角速度
+ * @brief: 运动学正解： 当前实际轮子转速 ----- 底盘实际的线速度角速度
  * @param {float} omega_A   车轮A的转速，单位rad/s
  * @param {float} omega_B
  * @return {*}
@@ -19,8 +19,8 @@ void Kinematics::forward(float omega_A, float omega_B)
 }
 
 /**
- * @brief: 上位机发来的指令线速度和角速度 ----> 两个轮子的期望线速度 m/s
- * @param {float} cmd_angular 角速度 m/s
+ * @brief: 上位机发来的指令线速度和角速度 ----> 四个轮子的期望线速度 m/s 和角度
+ * @param {float} cmd_angular 车身线速度vx vy m/s 角速度omega rad/s
  * @return {*}
  */
 void Kinematics::inverse(Cmd cmd)
@@ -32,7 +32,17 @@ void Kinematics::inverse(Cmd cmd)
     rr = calculate_swerve_wheel(cmd.vx, cmd.vy, cmd.omega, length, width, false, false); // 后右轮
 }
 
-// 计算每个舵轮的速度和角度
+/**
+ * @brief: 计算舵轮的速度和角度
+ * @param {double} vx       车身x方向速度
+ * @param {double} vy       车身y方向速度
+ * @param {double} omega    车身角速度
+ * @param {double} L        车长
+ * @param {double} W        车宽
+ * @param {bool} isFront    是否是前轮
+ * @param {bool} isLeft     是否是左轮
+ * @return {*}
+ */
 Wheel Kinematics::calculate_swerve_wheel(double vx, double vy, double omega, double L, double W, bool isFront, bool isLeft) {
     double x_component = isLeft ? (vx - omega * L / 2) : (vx + omega * L / 2);
     double y_component = isFront ? (vy + omega * W / 2) : (vy - omega * W / 2);
@@ -43,7 +53,12 @@ Wheel Kinematics::calculate_swerve_wheel(double vx, double vy, double omega, dou
     return adjust_wheel_angle(wheel);
 }
 
-// 将角度保持在 -90 到 90 度范围（第一四象限）内，并处理轮速方向
+// 
+/**
+ * @brief: 因为转向轮是有限位的，这里要限制一下角度，将角度保持在 -90 到 90 度范围（第一四象限）内，并处理轮速方向。
+ * @param {Wheel} wheel
+ * @return {*}
+ */
 Wheel Kinematics::adjust_wheel_angle(Wheel wheel) {
 
     // 厂家轮子和我的坐标系是反的
